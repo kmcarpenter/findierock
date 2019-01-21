@@ -1,8 +1,8 @@
 <?php
 
 
-defined('AWS_API_KEY') or define('AWS_API_KEY', 'AKIAI3SGTWZRKARK6DGA');
-defined('AWS_API_SECRET_KEY') or define('AWS_API_SECRET_KEY', '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');
+defined('AWS_API_KEY') or define('AWS_API_KEY', '');
+defined('AWS_API_SECRET_KEY') or define('AWS_API_SECRET_KEY', '');
 
 /**
  * Amazon ECS Class
