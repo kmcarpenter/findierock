@@ -1,0 +1,12 @@
+<h1>Event Search</h1>
+<?php  echo $this->form ?>
+<div id="eventlist">
+	Enter an event name in the box above and click search.
+</div>
+<script type="text/javascript">
+$(function() {
+	findierock.bindSearch("#EventForm", "#search", "/Events/do-search", "#eventlist" );
+	findierock.bindAutoComplete("#events", "/Events/get-events?callback=?", 2);
+});
+         
+</script>

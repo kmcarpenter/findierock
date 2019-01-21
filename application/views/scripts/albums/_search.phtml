@@ -1,0 +1,13 @@
+<h1>Album Search</h1>
+<?php  echo $this->form ?>
+<div id="albumlist">
+	Enter an album name in the box above and click search.
+</div>
+<script type="text/javascript">
+
+$(function() {
+	findierock.bindSearch("#AlbumForm", "#search", "/Albums/do-search", "#albumlist" );
+	findierock.bindAutoComplete("#albums", "/Albums/get-albums?callback=?", 2);
+});
+         
+</script>

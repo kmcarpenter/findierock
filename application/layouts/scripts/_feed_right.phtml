@@ -1,0 +1,16 @@
+<dl class="post_meta" style="width: 200px">
+	<dt class="meta_data">News</dt>
+	<dt>
+	<?php if (!count($this->feeds)) { ?>
+	No News 
+	<?php } else { ?>
+	<ul> <?php
+		foreach($this->feeds as $entry)
+		{ ?>
+		<li><a href="<?= $entry["link"] ?>"><?= $entry["title"] ?></a></li>
+		<?php }
+	     ?>
+	</ul>
+	<?php } ?>
+	</dt>
+</dl>

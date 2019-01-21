@@ -1,0 +1,213 @@
+<?php 
+if ($this->isValid )
+{ 
+?>
+<h1>Artist Info : <?php echo $this->artist->getName() ?></h1>
+<?= $this->partial('_socialBookmarks.phtml', array("url" => $this->thisUrl, "title" => $this->thisTitle)); ?>
+<div id="artist_tabs" class="tabContainerHeight">
+	<ul>
+		<li><a href='#bio'>Bio</a></li>
+		<li><a href='#albumtab'>Albums</a></li>
+		<li><a href='#eventtab'>Upcoming Events</a></li>
+		<li><a href='#pasteventtab'>Past Events</a></li>
+	</ul>
+	<div id="bio" class="artistartlarge">
+		<input type='hidden' id='artistid' value='<?= $this->artist->getArtistId() ?>' />
+		<img src='<?php echo $this->artist->image ?>' alt='Artist Photo' title='Artist Photo' /><br/>
+		<div style="float: left; clear: both; width: 128px; margin-right: 12px; margin-bottom: 12px;">
+		<strong>Average: </strong><span id="average"></span><br/>
+		<div style="float: right;">
+		<?= $this->rating(3, "artistaverage", true, array("Poor", "Ok", "Average", "Good", "Awesome"), "avgrating") ?>
+		</div>
+		<?php if ($this->isLoggedIn) { ?>
+		<strong>Rating: </strong><span id="ratinglabel"></span><br/>
+		<div style="float: right;">
+		<?= $this->rating($this->userRating, "artistrating", false, array("Poor", "Ok", "Average", "Good", "Awesome"), "usrrating") ?>
+		</div>
+		<?php } else { ?>
+		<div style="clear: both; padding-top: 5px;"><a href='<?= $this->loginLogoutUrl ?>'>Log in</a> to rate.</div>
+		<?php } ?>
+		</div>
+		<?php if(strlen($this->artist->getBiography()) > 1000) { ?>
+			 	<a class="dropdown_search" id="bioMore" href='' onclick='return false;'>More</a>
+			 	<div id="bioSummary">
+			 		<?= substr($this->artist->getBiography(), 0, 1000) ?>...
+			 	</div>
+			 	<div id="bioDetail" style="display:none" class="pageDefaultHeight">
+					<?= $this->artist->getLinkifiedBiography() ?>
+		 		</div>
+		<?php } else {
+				if ($this->artist->getBiography()) {
+					echo $this->artist->getLinkifiedBiography();
+				} else {
+					echo "We don't seem to know much about {$this->artist->getName()}...";
+				}
+		} ?>
+	</div>
+	<div id="albumtab" class="pageDefaultHeight">
+		<div id="albumlist">
+		<?php
+			$page = 0;
+			$i = 0;
+			if ($this->hasAlbums)
+			{
+				foreach($this->albums as $albumPage)
+				{
+					$page++;
+					$style = $page > 1 ? "display: none;" : "";
+					echo "<div class='album_page' id='album_page{$page}' style='$style'>";
+					foreach ($albumPage as $album)
+					{
+						?>
+						<div class="albumsummary albumartmed">
+					 		<img src='<?php echo $album->image ?>' alt='Album Art' title='Album Art' />
+	 						<div>
+							<strong>Title:</strong> <a href="<?= $this->url( array( "artist" => $album->getArtist()->getSlug(), "name" => $album->getSlug() ), "albumslug" ) ?>"><?= $album->getName() ?></a><br/>
+							<?php
+								if (isset($album->amazonLink))
+								{
+								?>
+								<strong>Buy:</strong><a href='<?= $album->amazonLink ?> ?>'>Buy on Amazon</a><br />
+								<?php 
+								} 
+							?>
+							<strong>Release:</strong> <?php echo $album->getReleaseDate() ?><br/>
+							<strong style="float: left;">Rating:&nbsp;</strong><div class="arc" style="float: left;" ><?= $this->rating(3, "albumrating_$i") ?></div>
+							</div>
+						</div>
+						<div style="clear: both;"></div>
+						<?php 
+						$i++;
+					}
+					echo "</div>";
+				}
+			}
+			else
+			{
+				echo "<p>None that we know of.</p>"; 	
+			}
+			?>
+			</div>
+			<?php 
+			$albumPages = $page;
+			if ($albumPages > 1)
+			{
+				echo $this->partial("shared/_pager.phtml", array( "id" => "album_pages", "pages" => $albumPages ));
+			}
+	?>
+	</div>
+	<div id="eventtab" class="pageDefaultHeight">
+		<div id="eventlist">
+		<?php
+			$page = 0;
+			if ($this->hasEvents)
+			{
+				$page = 0;
+				foreach($this->events as $eventPage)
+				{
+					$page++;
+					$style = $page > 1 ? "display: none" : "";
+					echo "<div class='event_page' id='event_page{$page}' style='$style'>";
+					foreach ($eventPage as $event) { ?>
+						<div class="eventsummary">
+							<strong>Event:</strong><a href='<?= $this->url( array( "name" => $event->getSlug() ), "eventslug" ) ?>'><?= $event->getName() ?></a><br/>
+							<strong>Venue:</strong><a href='<?= $this->url( array( "name" => $event->getVenue()->getSlug() ), "venueslug" ) ?>'><?= $event->getVenue()->getName() ?></a><br/>
+							<strong>Start:</strong><?php echo $event->getStart() ?><br/>
+						</div>
+					<?php }
+					echo "</div>";
+				}
+			}
+			else {
+				?><p>None that we know of.</p>
+			<?php }
+			?>
+			</div>
+			<?php 
+			$eventPages = $page;
+			if ($eventPages > 1)
+			{
+				echo $this->partial("shared/_pager.phtml", array( "id" => "event_pages", "pages" => $eventPages ));
+			}
+		?>
+	</div>
+	<div id="pasteventtab" class="pageDefaultHeight">
+		<div id="pasteventlist">
+		<?php
+			$page = 0;
+			if ($this->hasPastEvents)
+			{
+				$page = 0;
+				foreach($this->pastEvents as $eventPage)
+				{
+					$page++;
+					$style = $page > 1 ? "display: none" : "";
+					echo "<div class='event_page' id='past_event_page{$page}' style='$style'>";
+					foreach ($eventPage as $event)
+					{
+						?>
+						<div class="eventsummary">
+							<strong>Event:</strong><a href='<?= $this->url( array( "name" => $event->getSlug() ), "eventslug" ) ?>'><?= $event->getName() ?></a><br/>
+							<strong>Venue:</strong><a href='<?= $this->url( array( "name" => $event->getVenue()->getSlug() ), "venueslug" ) ?>'><?= $event->getVenue()->getName() ?></a><br/>
+							<strong>Start:</strong><?php echo $event->getStart() ?><br/>
+						</div>
+						<?php 
+					}
+					echo "</div>";
+				}
+			}
+			else {
+				?><p>None that we know of.</p><?php
+			}
+			?>
+			</div>
+			<?php 
+			$pastEventPages = $page;
+			if ($pastEventPages > 1)
+			{
+				echo $this->partial("shared/_pager.phtml", array( "id" => "past_event_pages", "pages" => $pastEventPages ));
+			}
+		?>
+	</div>
+</div>
+<?php 
+}
+else
+{
+	echo "<p>Invalid artist...</p>";
+}
+?>
+<script type="text/javascript">
+	$(function() {
+
+		$("#artist_tabs").tabs();
+	
+		$("#bioMore").toggle( function(){
+				$(this).addClass("active_dropdown_tag"); 
+		    }, function () {
+		   		$(this).removeClass("active_dropdown_tag");
+	    });
+	    
+		$(".dropdown_search").click(function(){
+			$(this).html() == "More" ? $(this).html("Less") : $(this).html("More");
+			$("#bioSummary").slideToggle("400").next("div").slideToggle("400");
+		});
+	
+	<?php
+	if ($albumPages > 1) { ?>
+		findierock.bindPager('#album_pages', 'slider_album', '.album_page', "#album_page", <?= $albumPages ?> );
+	<?php }
+	if ($eventPages > 1) { ?>
+		findierock.bindPager('#event_pages', 'slider_events', '.event_page', "#event_page", <?= $eventPages ?> );
+	<?php }
+	if ($pastEventPages > 1) { ?>
+		findierock.bindPager('#past_event_pages', 'slider_past_events', '.event_page', "#past_event_page", <?= $pastEventPages ?> );
+	<?php } ?>
+
+		$("#avgrating").stars({captionEl: $("#average"), cancelTitle: "Cancel"});
+		$(".arc").stars();
+	<?php if ($this->isLoggedIn) { ?>
+		$("#usrrating").stars({captionEl: $("#ratinglabel"), cancelTitle: "Cancel", callback: findierock.saveArtistRating});
+	<?php } ?>
+	});
+</script>

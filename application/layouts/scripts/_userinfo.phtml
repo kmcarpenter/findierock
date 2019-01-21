@@ -1,0 +1,12 @@
+<dl class="post_meta">
+	<dt class="meta_data">User Info</dt>
+	<dt><span id="userinfo">
+		<?php if ($this->username) { ?>
+		<strong><?= $this->username ?></strong><br/>
+		<a href='<?= $this->loginLogoutUrl ?>'><?= $this->loginLogoutTitle ?></a>
+		<?php } else { ?>
+		<strong><a href='<?= $this->loginLogoutUrl ?>'><?= $this->loginLogoutTitle ?></a></strong><br/>
+		<a href='<?= $this->registerUrl ?>'>Sign Up</a>
+		<?php } ?>
+	</span></dt>
+</dl>

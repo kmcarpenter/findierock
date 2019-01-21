@@ -1,0 +1,31 @@
+<h1>Add Venue</h1>
+<?php if ($this->username) { ?>
+<div style="float: left;"><?php  echo $this->form ?></div>
+<div style="float: left;"></div>
+<script type='text/javascript'>
+	$(function() {
+		maps.addMaps("maps.startupDummy");
+		$("#streetAddress, #city, #prov, #country").change( function() {
+			var add = "";
+			if ($("#streetAddress").val() != "") {
+				add += $("#streetAddress").val();
+			}
+			if ($("#city").val() != "") {
+				if (add != "") { add += ","; }
+				add += $("#city").val();
+			}
+			if ($("#prov").val() != "") {
+				if (add != "") { add += ","; }
+				add += $("#prov").val();
+			}
+		
+			if (add != "") { add += ","; }
+			add += $("#country option:selected").text();
+
+			maps.getLatLong(add, "#geo");
+		});	
+	});
+</script>
+<?php } else { ?>
+You must be logged in to add venues.
+<?php  } ?>

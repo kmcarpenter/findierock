@@ -1,0 +1,11 @@
+<h1>Artist Search</h1>
+<?php  echo $this->form ?>
+<div id="artistlist">
+	Enter an artist name in the box above and click search.
+</div>
+<script type="text/javascript">
+$(function() {
+	findierock.bindSearch("#ArtistForm", "#search", "/Artists/do-search", "#artistlist" );
+	findierock.bindAutoComplete("#artists", "/Artists/get-artists?callback=?", 2);
+});  
+</script>

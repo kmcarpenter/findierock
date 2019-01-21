@@ -1,0 +1,15 @@
+<h1>
+Venue Search
+</h1>
+<?php  echo $this->form ?>
+<div id="venuelist">
+	Enter a venue name in the box above and click search.
+</div>
+<script type="text/javascript">
+
+$(function() {
+	findierock.bindSearch("#VenueForm", "#search", "/Venues/do-search", "#venuelist" );
+	findierock.bindAutoComplete("#venues", "/Venues/get-venues?callback=?", 2);
+});
+         
+</script>

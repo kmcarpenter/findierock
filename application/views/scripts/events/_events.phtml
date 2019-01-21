@@ -1,0 +1,25 @@
+<?php
+	if ($this->hasEvents)
+	{
+		foreach($this->events as $event)
+		{ ?>
+			<div>
+			<h3><a href='<?= $this->url( array( "name" => $event->getSlug() ), "eventslug" ) ?>' title="View this event's info"><?= $event->getName() ?></a></h3>
+			<a href='<?= $this->url( array( "name" => $event->getVenue()->getSlug() ), "venueslug" ) ?>'><?= $event->getVenue()->getName(); ?></a><br/>
+			<?php 
+				echo $event->getVenue()->getCity();
+				if ($event->getVenue()->getProvince())
+				{
+					echo ", " . $event->getVenue()->getProvince();
+				}
+			?><br/>
+			Start: <?= $event->getStart() ?>
+			</div>
+<?php 
+		}
+	}
+	else
+	{
+		echo "<div>Sorry, we can't find any events matching that name!</div>";
+	} 
+?>

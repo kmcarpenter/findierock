@@ -1,0 +1,49 @@
+<?php
+if ($this->hasEvents)
+{
+	?>
+	<div id="eventlist">
+	<?php
+	$page = 0;
+	foreach($this->events as $eventPage)
+	{
+		$page++;
+		$style = $page > 1 ? "display: none;" : "";
+		echo "<div class='event_page' id='event_page{$page}' style='$style'>";	
+		foreach($eventPage as $event)
+		{
+			?>
+			<div>
+			<h3><a href='<?= $this->url(  array( "name" => $event->getSlug() ), "eventslug" ) ?>' title="View this event's info"><?= $event->getName() ?></a></h3>
+			Venue: <a href='<?= $this->url( array( "name" => $event->getVenue()->getSlug() ), "venueslug" ) ?>'><?= $event->getVenue()->getName(); ?></a><br/>
+			Start: <?= $event->getStart() ?>
+			</div>
+			<?php
+		}
+		echo "</div>";
+	}
+	?>
+	</div>
+	<?php
+	$eventPages = $page;
+	if ($eventPages > 1)
+	{
+		echo $this->partial("shared/_pager.phtml", array( "id" => "event_pages", "pages" => $eventPages ));
+	} 
+	?>
+	<?php if ($eventPages > 1) { ?>
+	<script type="text/javascript">
+	$(function() {
+		findierock.bindPager('#event_pages', 'slider_events', '.event_page', "#event_page", <?= $eventPages ?> );
+	});
+	</script>
+	<?php } ?>
+<?php 
+}
+else
+{
+?>
+<div>Sorry, we can't find any events there!</div>
+<?php
+} 
+?>

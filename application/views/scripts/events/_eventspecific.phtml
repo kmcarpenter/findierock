@@ -1,0 +1,88 @@
+<?php 
+if ($this->isValid )
+{ 
+?>
+<?= $this->partial('_socialBookmarks.phtml', array("url" => $this->thisUrl, "title" => $this->thisTitle)); ?>
+<div id="event_tabs">
+	<ul>
+		<li><a href='#summary'>Summary</a></li>
+		<li><a href='#artists'>Artists</a></li>
+		<li><a href='#map'>Map</a></li>
+	</ul>
+	<div id="summary" class="pageDefaultHeight">
+		Venue: <a href="<?= $this->url( array( "name" => $this->event->getVenue()->getSlug() ),  "venueslug" ) ?>"><?=$this->event->getVenue()->getName(); ?></a><br/>
+		Start: <?= $this->event->getStart() ?><br />
+		Finish: <?= $this->event->getFinish() ?><br />
+		Cover: <?= $this->event->getCover() ?><br />
+		Cancelled: <?= $this->event->getCancelled() ? "Yes" : "No" ?>
+	</div>
+	<div id="artists" class="pageDefaultHeight">
+		<?php
+		foreach ($this->eventartists as $eventartist)
+		{ ?>
+			<div>
+			<a href='<?= $this->url( array( "name" => $eventartist->getArtist()->getSlug() ), "artistslug" ) ?>'><?= $eventartist->getArtist()->getName() ?></a>
+			<?php
+			if ($eventartist->getHeadliner())
+			{
+				?>
+				<strong>(Headliner)</strong>
+				<?php
+			} 
+			?>
+			</div>
+			<?php 
+		} 
+		?>
+	</div>
+	<div id="map" class="pageDefaultHeight">
+		<div id="mapcontainer">
+		</div>
+	</div>
+</div>
+<script type='text/javascript'>
+	var mapsLoaded = false;
+	
+	$(document).ready(function()
+			{
+				$("#event_tabs").tabs(
+						{
+							show: function(event, ui)
+							{
+								if (ui.panel == $("#map")[0] && !mapsLoaded)
+								{
+									var script = document.createElement("script");
+									script.type = "text/javascript";
+									script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=initMap";
+									document.body.appendChild(script);
+
+									mapsLoaded = true;
+								}
+							}
+						}
+				);				
+
+			}
+	);
+
+	function initMap()
+	{
+		var venueLatLng = new google.maps.LatLng(<?php echo $this->event->getVenue()->getLatitude() ?>, <?php echo $this->event->getVenue()->getLongitude() ?>);
+		var options = {
+		    zoom: 15,
+		    center: venueLatLng,
+		    mapTypeId: google.maps.MapTypeId.ROADMAP
+		}
+		var map = new google.maps.Map(document.getElementById("mapcontainer"), options);
+
+		var marker = new google.maps.Marker({
+		    position: venueLatLng, 
+		    map: map, 
+		    title:"<?php echo $this->event->getVenue()->getName() ?>"
+		});
+	}
+	
+</script>
+<?php
+} 
+?>

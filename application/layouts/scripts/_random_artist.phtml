@@ -1,0 +1,9 @@
+<dl class="post_meta">
+  <dt>Random Artist</dt>
+  <dt>
+	  <span id="randomartist">
+	  	<strong><a href='<?= $this->url( array( "name" => $this->randomArtist->getSlug() ), "artistslug" ) ?>' title="View this Artist"><?php echo $this->randomArtist->getName() ?></a></strong>
+	  	<span class='rightblock'><img src='<?php echo $this->randomArtist->image ?>' alt="Artist Picture" /></span>
+	  </span>
+  </dt>
+</dl>

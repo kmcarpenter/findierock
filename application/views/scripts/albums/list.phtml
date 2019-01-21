@@ -1,0 +1,29 @@
+<h1>List Albums</h1>
+
+<div>
+<?= $this->alphaLinks ?>
+</div>
+<br />
+<?php 
+if ($this->noFilter)
+{
+	?>
+	<div>
+	Please select a filter from the list above to start your listing.
+	</div>
+	<?php 
+}
+else
+{
+	?>
+	<div>
+		<h2><?= $this->filterCount ?> Albums Starting With <?= $this->filter ?></h2>
+		<?= $this->pagerLinks ?>
+		<div id="albumlist">
+		<?= $this->render("albums/_albums.phtml") ?>
+		</div>
+		<?= $this->pagerLinks ?>
+	</div>
+	<?php
+} 
+?>

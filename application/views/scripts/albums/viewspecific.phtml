@@ -1,0 +1,94 @@
+<?php 
+if ($this->isValid )
+{ 
+?>
+<h1>Album Info : <?php echo $this->album->getName() ?></h1>
+<?= $this->partial('_socialBookmarks.phtml', array("url" => $this->thisUrl, "title" => $this->thisTitle)); ?>
+<div id="artist_tabs" class="tabContainerHeight">
+	<ul>
+		<li><a href='#album'>Album</a></li>
+		<li><a href='#tracks'>Tracks</a></li>
+	</ul>
+	<div id="album">
+		<input type='hidden' id='albumid' value='<?= $this->album->getAlbumId() ?>' />
+	 	<div id="albumdetail" class="albumartlarge">
+	 		<img src='<?= $this->album->image ?>' alt='Album Art' title='Album Art' />
+	 		<div style="float: left; clear: both; width: 128px; margin-right: 12px; margin-bottom: 12px;">
+			<strong>Average: </strong><span id="average"></span><br/>
+			<div style="float: right;">
+			<?= $this->rating(3, "albumaverage", true, array("Poor", "Ok", "Average", "Good", "Awesome"), "avgrating") ?>
+			</div>
+			<?php if ($this->isLoggedIn) { ?>
+			<strong>Rating: </strong><span id="ratinglabel"></span><br/>
+			<div style="float: right;">
+			<?= $this->rating($this->userRating, "albumrating", false, array("Poor", "Ok", "Average", "Good", "Awesome"), "usrrating") ?>
+			</div>
+			<?php } else { ?>
+			<div style="clear: both; padding-top: 5px;"><a href='<?= $this->loginLogoutUrl ?>'>Log in</a> to rate.</div>
+			<?php } ?>
+			</div>
+	 		<div>
+	 		<?php if (isset($this->album->amazonLink)) { ?>
+	 			Buy: <a href='<?= $this->album->amazonLink ?>'>Buy on Amazon</a><br />
+	 		<?php } ?>
+	 		Artist: <a href='<?= $this->url( array( "name" => $this->album->getArtist()->getSlug() ), "artistslug") ?>'><?php echo $this->album->getArtist()->getName() ?></a><br />
+	 		Name: <?= $this->album->getName() ?><br />
+	 		Label: <?= $this->album->getLabel() ?><br/>
+	 		Copyright: <?= $this->album->getCopyright() ?> <br/>
+	 		Release Date: <?= $this->album->getReleaseDate() ?><br/>
+	 		Producer: <?= $this->album->getProducer() ?><br/>
+	 		Type: <?= $this->album->getAlbumType() ?><br/>
+	 		</div>
+	 	</div>
+	</div>
+	<div id="tracks" class="pageDefaultHeight">
+		<div id="tracklist">
+		<?php
+			if ($this->hasTracks)
+			{
+				foreach ($this->tracks as $track)
+				{
+					?>
+					<div>
+						<span class="track">
+						<?php echo $track->getName() ?> ( <?php echo date("i:s", $track->getLength()/1000) ?> )
+						</span>
+						<?php if (isset($track->amazonLink))
+						{
+						?>
+						<a href='<?= $track->amazonLink ?>' style="float: right;">Buy on Amazon</a>
+						<?php
+						} 
+						?>
+					</div> 	
+					<?php 
+				}
+			}
+			else
+			{
+				echo "<p>None that we know of.</p>"; 	
+			}
+			?>
+		</div>
+		<div style="clear: both;"></div>
+	</div>
+</div>
+<?php 
+}
+else
+{
+	echo "<p>Invalid album...</p>";
+}
+?>
+<script type="text/javascript">
+	$(function()
+			{
+				$("#artist_tabs").tabs();
+				
+				$("#avgrating").stars({captionEl: $("#average"), cancelTitle: "Cancel"});
+				<?php if ($this->isLoggedIn) { ?>
+					$("#usrrating").stars({captionEl: $("#ratinglabel"), cancelTitle: "Cancel", callback: findierock.saveAlbumRating});
+				<?php } ?>
+			}
+	);
+</script>

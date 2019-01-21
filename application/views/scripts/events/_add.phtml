@@ -1,0 +1,26 @@
+<h1>Add Event</h1>
+<?php if ($this->username) { ?>
+<div style="float: left;"><?php  echo $this->form ?></div>
+<div style="float: left;"></div>
+<script type='text/javascript'>
+	$(function() {
+ 		$('#eventDate').datepicker();
+ 		$('#eventTime').timepicker({
+ 		    showPeriod: true,
+ 		    showLeadingZero: false
+ 		});
+ 		$('#addArtist').click(function(e) {
+ 	 			e.preventDefault();
+ 	 			var id = "artists" + $(".artist").length;
+ 	 			$("<br/>").after($("#artists0").clone().attr('id', id ).attr('name', id).val("")).appendTo($("#artists0").parent());
+ 	 			findierock.bindAutoComplete("#" + id, "/Artists/get-artists?callback=?", 2);
+ 		});
+
+
+ 		findierock.bindAutoComplete("#artists0", "/Artists/get-artists?callback=?", 2);
+ 		findierock.bindAutoComplete("#venueName", "/Venues/get-venues?callback=?", 2);
+	});
+</script>
+<?php } else { ?>
+You must be logged in to add events.
+<?php  } ?>

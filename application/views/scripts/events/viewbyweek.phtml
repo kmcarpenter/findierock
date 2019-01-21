@@ -1,0 +1,7 @@
+<?php 
+	echo $this->render("events/_eventsByDate.phtml");
+?>
+<script type='text/javascript'>
+	$("#dateStart").val("<?= $this->date ?>");
+	$("#dateEnd").val("<?= $this->dateFinish ?>");
+</script>

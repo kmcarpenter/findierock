@@ -1,0 +1,29 @@
+<?php
+	if ($this->hasVenues)
+	{
+		foreach($this->venues as $venue)
+		{
+?>
+			<div>
+			<h3><a href="<?= $this->url( array( "name" => $venue->getSlug() ), "venueslug" ) ?>" title="View this venue's info"><?= $venue->getName() ?></a></h3>
+			Address: <?= $venue->getAddress() ?><br/>
+			City: <?= $venue->getCity() ?><br/>
+			<?php
+			if ($venue->getWebsite())
+			{
+				?>
+				Website: <a href='<?php echo $venue->getWebsite() ?>'><?php echo $venue->getWebsite() ?></a><br/>
+				<?php
+			}
+			?>
+			</div>
+<?php 
+		}
+	}
+	else
+	{
+		?>
+		<div>Sorry, we can't find any venues matching that name!</div>
+		<?php
+	} 
+?>

@@ -1,0 +1,11 @@
+<h1>Artists</h1>
+<p>
+Here you will find all the artists we have on file. You can just go <a href='<?= $this->url( array( "action" => "Search" ) )?>'>search</a> for an artist of your liking, take a look
+at our <a href='<?= $this->url( array( "action" => "Latest" ) ) ?>'>newest</a> artists, or see what's <a href='<?= $this->url( array( "action" =>  "Popular" ) ) ?>'>popular</a> right now.
+</p>
+<p>
+In order to get you started, here's our artist of the day:
+</p>
+<div id='artistoftheday'>
+	<?= $this->render("artists/view.phtml") ?>
+</div>

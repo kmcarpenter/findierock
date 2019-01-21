@@ -1,0 +1,12 @@
+<h1>Venues</h1>
+<p>
+Here you will find all the venues we have on file. You can just go <a href='<?= $this->url( array( "action" => "Search" ) ) ?>'>search</a>
+for a venue of your liking, take a look at our <a href='<?= $this->url( array( "action" => "Latest" ) ) ?>'>newest</a> venues, or see what's 
+<a href='<?= $this->url( array( "action" => "Popular" ) ) ?>'>popular</a> right now.
+</p>
+<p>
+In order to get you started, here's our venue of the day:
+</p>
+<div id='venueoftheday'>
+	<?= $this->render("venues/view.phtml") ?>
+</div>

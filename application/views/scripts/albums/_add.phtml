@@ -1,0 +1,20 @@
+<h1>Add Album</h1>
+<?php if ($this->username) { ?>
+<div style="float: left;"><?php  echo $this->form ?></div>
+<div style="float: left;"></div>
+<script type='text/javascript'>
+	$(function() {		
+ 		$('#releaseDate').datepicker();
+ 		$('#addTrack').click(function(e) {
+ 	 			e.preventDefault();
+ 	 			var id = "track" + $(".albumtrack").length;
+ 	 			$("<br/>").after($("#track0").clone().attr('id', id ).attr('name', id).val("")).appendTo($("#track0").parent());
+ 		});
+
+
+ 		findierock.bindAutoComplete("#artist", "/Artists/get-artists?callback=?", 2);
+	});
+</script>
+<?php } else { ?>
+You must be logged in to add events.
+<?php  } ?>

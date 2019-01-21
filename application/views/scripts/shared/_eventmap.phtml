@@ -1,0 +1,32 @@
+<div id="event_tabs">
+        <ul>
+                <li><a href="#today">Today</a></li>
+                <li><a href="#tomorrow">Tomorrow</a></li>
+                <?php
+                $x = 0;
+                foreach($this->events["week"] as $day => $ignore) { ?>
+                        <li><a href="#day<?= $x ?>"><?= $day ?></a></li>
+                        <?php
+                        $x++;
+                } ?>
+        </ul>
+        <?= $this->partial("shared/_eventmaptab.phtml", array( "div" => "today", "events" => $this->events["today"], "prefix" => "")) ?>
+        <?= $this->partial("shared/_eventmaptab.phtml", array( "div" => "tomorrow", "events" => $this->events["tomorrow"], "prefix" => "")) ?>
+        <?php
+        $x = 0;
+        foreach($this->events["week"] as $day => $events) { 
+        	echo $this->partial("shared/_eventmaptab.phtml", array( "div" => $x, "events" => $events, "prefix" => "day"));
+        	$x++;
+        } ?>
+</div>
+<script type="text/javascript">
+	$(function() {
+		maps.city = "<?= $this->location->getCity() ?>";
+		maps.latitude = <?= $this->location->getPoint()->getLatitude(); ?>;
+		maps.longitude = <?= $this->location->getPoint()->getLongitude(); ?>;
+		maps.events = <?= $this->eventJSON($this->events["today"], $this->events["tomorrow"], $this->events["week"]) ?>;
+		
+		maps.startUpTabs("#event_tabs", "today", "tomorrow", "map");
+	});
+</script>
+

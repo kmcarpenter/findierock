@@ -1,0 +1,29 @@
+<h1>List Events</h1>
+<div>
+<?= $this->alphaLinks ?>
+</div>
+<br />
+<?php 
+if ($this->noFilter)
+{
+	?>
+	<div>
+	Please select a filter from the list above to start your listing.
+	</div>
+	<?php 
+}
+else
+{
+	?>
+	<div>
+		<h2><?= $this->filterCount ?> Events Starting With <?= $this->filter ?></h2>
+		<p><em>No past events are displayed on this list.</em></p>
+		<?= $this->pagerLinks ?>
+		<div id="eventlist">
+		<?= $this->render("events/_events.phtml") ?>
+		</div>
+		<?= $this->pagerLinks ?>
+	</div>
+	<?php
+} 
+?>

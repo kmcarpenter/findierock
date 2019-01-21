@@ -1,0 +1,30 @@
+<?php
+	if ($this->hasArtists)
+	{
+		foreach($this->artists as $artist)
+		{ ?>
+			<div>
+			<h3><a href='<?= $this->url( array( "name" => $artist->getSlug() ), "artistslug" ) ?>' title="View this artist's info"><?php echo $artist->getName() ?></a></h3>
+			<p>Artist Bio:</p>
+			<div>
+				<?php
+					
+					if (mb_strlen($artist->getBiography()) > 200)
+					{ 
+						echo mb_substr($artist->getBiography(), 0, 200) . "...";
+					}
+					else
+					{
+						echo $artist->getBiography();
+					}
+				?>
+			</div>
+			</div>
+<?php 
+		}
+	}
+	else
+	{
+		echo "<div>Sorry, we can't find any artists matching that name!</div>";
+	} 
+?>

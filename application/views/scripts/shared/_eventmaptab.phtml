@@ -1,0 +1,23 @@
+<div id="<?= $this->prefix ?><?= $this->div ?>">
+	<div id="map<?= $this->div ?>" class="pageDefaultHeight">
+	</div>
+	<div class="eventlist">
+	<?php
+		foreach($this->events as $event) { ?>
+		<div>
+		<h3><a href="<?= $this->url( array( "name" => $event->getSlug() ), "eventslug" ) ?>" title="View this event's info"><?= $event->getName() ?></a></h3>
+		<h4><a href="<?= $this->url( array( "name" => $event->getVenue()->getSlug() ), "venueslug" ) ?>" title="Venue Details"><?= $event->getVenue()->getName() ?></a></h4>
+		<span>
+		<?php
+			echo $event->getVenue()->getCity();
+			if ($event->getVenue()->getProvince())
+			{
+				echo ", " . $event->getVenue()->getProvince();
+			}
+		?>
+		</span><br/>
+		<span><?php echo $event->getStart() ?></span>
+		</div>
+	<?php } ?>
+	</div>
+</div>

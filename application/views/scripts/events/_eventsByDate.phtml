@@ -1,0 +1,46 @@
+<h1 id="cityname">Event Info <?= $this->city ?></h1>
+<h2><?= $this->date . (isset($this->dateFinish) ? " - {$this->dateFinish}" : "") ?></h2>
+<?= $this->partial("shared/_nearbycities.phtml", array( "div" => "city_search", "cities" => $this->nearby, "form" => $this->form)) ?>
+<div id="eventlistpages" class="pageDefaultHeight">
+<?php 
+	if ($this->isValid )
+	{ 
+		echo $this->render("events/_eventPages.phtml");
+	}
+	else
+	{
+		echo "<div>Sorry, we can't find any events matching that name!</div>";
+	} 
+?>
+</div>
+<script type='text/javascript'>
+$(function() {
+	var searchAction = function() {
+		$.ajax({
+					url: "/Events/search-by-date",
+					type: "post",
+					data: $("#CityForm").serialize(),
+					dataType: "json",
+					success: function(data) {
+						if (data != null) {
+							if (data.valid) {
+								$("#cityname").html(data.city);
+								$("#eventlistpages").html(data.events);
+							}
+						}
+					}
+				});
+		return false;
+	};
+
+	$("#citylist").children().click( function() {
+		$("#city").val($(this).html().split(",")[0]);
+		return searchAction();
+	});
+	
+	$("#search").click( searchAction );
+	$("#CityForm").submit( searchAction );
+
+	findierock.bindAutoComplete("#city", "/Events/get-cities?callback=?", 2);
+});
+</script>

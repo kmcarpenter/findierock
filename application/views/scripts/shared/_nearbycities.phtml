@@ -1,0 +1,18 @@
+<a class="dropdown_search" href='' onclick='return false;'>Other Cities</a>
+<div id="<?= $this->div ?>" style="display: none;">
+	<div>
+	<br/>
+	<strong>Nearby Cities:</strong><br/>
+	<div style='margin-left: 10px' id="citylist">
+	<?php 
+	foreach ($this->cities as $nearby)
+	{
+		?>
+		<a href='<?= $this->url( array( "city" => $nearby['Venue.City'], "state" => $nearby['Venue.Province'] ), "eventsnear" ) ?>'><?= $nearby['Venue.City']  ?>, <?= $nearby['Venue.Province'] ?></a><br/>
+		<?php
+	}
+	?>
+	</div>
+	</div>
+	<?= $this->form; ?>
+</div>

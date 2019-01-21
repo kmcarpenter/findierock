@@ -1,0 +1,148 @@
+<?php 
+if ($this->isValid )
+{ 
+?>
+<h1>Venue Info : <?php echo $this->venue->getName() ?></h1>
+<?= $this->partial('_socialBookmarks.phtml', array("url" => $this->thisUrl, "title" => $this->thisTitle)); ?>
+<div id="venue_tabs">
+	<ul>
+		<li><a href='#summary'>Summary</a></li>
+		<li><a href='#events'>Upcoming Events</a></li>
+		<li><a href='#map'>Map</a></li>
+	</ul>
+	<div id="summary" class="pageDefaultHeight">
+		<input type='hidden' id='venueid' value='<?= $this->venue->getVenueId() ?>' />
+		<div id="venuedetail" class="venueartlarge">
+			<img src='<?php echo $this->venue->image ?>' alt='Venue Picture' title='Venue Picture' />
+	 		<div style="float: left; clear: both; width: 128px; margin-right: 12px; margin-bottom: 12px;">
+			<strong>Average: </strong><span id="average"></span><br/>
+			<div style="float: right;">
+			<?= $this->rating(3, "venueaverage", true, array("Poor", "Ok", "Average", "Good", "Awesome"), "avgrating") ?>
+			</div>
+			<?php if ($this->isLoggedIn) { ?>
+			<strong>Rating: </strong><span id="ratinglabel"></span><br/>
+			<div style="float: right;">
+			<?= $this->rating($this->userRating, "venuerating", false, array("Poor", "Ok", "Average", "Good", "Awesome"), "usrrating") ?>
+			</div>
+			<?php } else { ?>
+			<div style="clear: both; padding-top: 5px;"><a href='<?= $this->loginLogoutUrl ?>'>Log in</a> to rate.</div>
+			<?php } ?>
+			</div>
+			Venue: <?php echo $this->venue->getName(); ?><br/>
+			Address: <?php echo $this->venue->getAddress() ?><br/>
+			City: <?php echo $this->venue->getCity() ?><br/>
+			State/Province: <?php  echo $this->venue->getProvince() ?><br/>
+			Country: <?php echo $this->venue->getCountry() ?><br/>
+			Phone: <?php  echo $this->venue->getPhone() ?><br/>
+			Website: 
+				<?php
+				if ($this->venue->getWebsite())
+				{
+					?>
+					<a href='<?php echo $this->venue->getWebsite() ?>'><?php echo $this->venue->getWebsite() ?></a><br/>
+					<?php
+				}
+				?>
+			Description:
+			<div>
+			<?php echo $this->venue->getDescription() ?>
+			</div>
+		</div>
+	</div>
+	<div id="events" class="pageDefaultHeight">
+		<div id="eventlist">
+		<?php
+			$page = 0;
+			if ($this->hasEvents)
+			{
+				foreach($this->events as $eventPage)
+				{
+					$page++;
+					$style = $page > 1 ? "display: none" : "";
+					echo "<div class='event_page' id='event_page{$page}' style='$style'>";
+					foreach ($eventPage as $event) { ?>
+						<div class="eventsummary">
+							<strong>Event:</strong><a href='<?= $this->url( array( "name" => $event->getSlug() ), "eventslug" ) ?>'><?= $event->getName() ?></a><br/>
+							<strong>Start:</strong><?= $event->getStart() ?><br/>
+						</div>
+						<?php 
+					}
+					echo "</div>";
+				}
+			}
+			else
+			{
+				echo "<p>None that we know of.</p>"; 	
+			}
+			?>
+			</div>
+			<?php
+			$eventPages = $page;
+			if ($eventPages > 1)
+			{
+				echo "Page: <select id='event_pages'>";
+				for ($i=1;$i<=$eventPages;$i++)
+				{
+					echo "<option value='$i'>$i</option>";
+				}
+				echo "</select>";
+			}
+		?>
+	</div>
+	<div id="map" class="pageDefaultHeight">
+		<div id="mapcontainer">
+		</div>
+	</div>
+</div>
+<script type='text/javascript'>
+	var mapsLoaded = false;
+	
+	$(function() {
+		$("#venue_tabs").tabs(
+				{
+					show: function(event, ui)
+					{
+						if (ui.panel == $("#map")[0] && !mapsLoaded)
+						{
+							var script = document.createElement("script");
+							script.type = "text/javascript";
+							script.src = "http://maps.google.com/maps/api/js?sensor=false&callback=initMap";
+							document.body.appendChild(script);
+
+							mapsLoaded = true;
+						}
+					}
+				}
+		);
+
+		<?php if ($eventPages > 1) { ?> 
+		findierock.bindPager('#event_pages', 'slider_events', '.event_page', "#event_page", <?= $eventPages ?> );
+		<?php } ?>
+
+		$("#avgrating").stars({captionEl: $("#average"), cancelTitle: "Cancel"});
+	<?php if ($this->isLoggedIn) { ?>
+		$("#usrrating").stars({captionEl: $("#ratinglabel"), cancelTitle: "Cancel", callback: findierock.saveVenueRating});
+	<?php } ?>
+	});
+	
+	function initMap()
+	{
+		var venueLatLng = new google.maps.LatLng(<?php echo $this->venue->getLatitude() ?>, <?php echo $this->venue->getLongitude() ?>);
+		var options = {
+		    zoom: 15,
+		    center: venueLatLng,
+		    mapTypeId: google.maps.MapTypeId.ROADMAP
+		}
+		var map = new google.maps.Map(document.getElementById("mapcontainer"), options);
+
+		var marker = new google.maps.Marker({
+		    position: venueLatLng, 
+		    map: map, 
+		    title:"<?= $this->venue->getName() ?>"
+		});
+	}
+</script>
+<?php
+} else { ?>
+<h1>Invalid Venue</h1>
+<?php } ?>

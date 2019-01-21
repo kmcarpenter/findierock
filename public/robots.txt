@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: http://www.findierock.com/sitemap.xml.gz

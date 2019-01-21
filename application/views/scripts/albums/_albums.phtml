@@ -1,0 +1,18 @@
+<?php
+	if ($this->hasAlbums)
+	{
+		foreach($this->albums as $album)
+		{
+?>
+			<div>
+			<h3><a href="<?= $this->url( array( "artist" => $album->getArtist()->getSlug(), "name" => $album->getSlug() ), "albumslug" ) ?>" title="View this album's info"><?php echo $album->getName() ?></a></h3>
+			Artist: <?php echo $album->getArtist()->getName(); ?>
+			</div>
+<?php 
+		}
+	}
+	else
+	{
+		echo "<div>Sorry, we can't find any albums matching that name!</div>";
+	} 
+?>

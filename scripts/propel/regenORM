@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#reverse enginer the db
+propel-gen reverse
+
+# strip the wp tables
+xsltproc stripWpTables.xslt ../../application/configs/schema/schema.xml > ../../application/configs/schema/schema.new.xml
+
+# replace the xml file
+mv ../../application/configs/schema/schema.new.xml ../../application/configs/schema/schema.xml
+
+#rebuild the ORM
+propel-gen

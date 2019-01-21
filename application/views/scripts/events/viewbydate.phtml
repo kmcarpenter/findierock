@@ -1,0 +1,8 @@
+<?php 
+	echo $this->render("events/_eventsByDate.phtml");
+?>
+<script type='text/javascript'>
+	$(function() {
+		$("#dateStart").val("<?= $this->date ?>");
+	});
+</script>

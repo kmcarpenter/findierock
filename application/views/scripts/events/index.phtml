@@ -1,0 +1,11 @@
+<h1>Events</h1>
+<p>
+Here you will find all the events we have on file. You can see what's happening <a href='<?= $this->url( array( "action" => "Today" ) ) ?>'>today</a>, what's going on for the
+rest of the <a href='<?= $this->url( array( "action" => "ThisWeek" ) ) ?>'>week</a>, or you can just go <a href='<?= $this->url( array( "action" => "Search" ) ) ?>'>search</a> for an event of your liking.
+You can also take a look at our <a href='<?= $this->url( array( "action" => "Latest" ) ) ?>'>latest</a> events, or see what's <a href='<?= $this->url( array( "action" => "Popular" ) ) ?>'>popular</a> right now.
+</p>
+<p>In order to get you started, here's our event of the day:</p>
+<div id='eventoftheday'>
+	<h2>Event Info : <?= $this->event->getName() ?></h2>
+	<?= $this->render("events/_eventspecific.phtml") ?>
+</div>

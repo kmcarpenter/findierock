@@ -1,0 +1,16 @@
+#!/bin/bash
+
+path=../../public
+jspath=${path}/js/
+csspath=${path}/css/
+
+cat ${jspath}findierock.js ${jspath}jscript.js ${jspath}scroll.js ${jspath}jquery.ui.timepicker.js ${jspath}jquery.ui.stars.js  > ${jspath}findie.js
+
+#name the file .javascript to avoid an apache caching bug
+java -jar /usr/share/yui-compressor/yui-compressor.jar -v ${jspath}findie.js -o ${jspath}findie.javascript
+
+rm ${jspath}findie.js
+
+cat ${csspath}style.css ${csspath}jquery-ui-1.8.5.custom.css ${csspath}jquery.ui.stars.css > ${csspath}findierock.css
+
+java -jar /usr/share/yui-compressor/yui-compressor.jar -v ${csspath}findierock.css -o ${csspath}findie.css

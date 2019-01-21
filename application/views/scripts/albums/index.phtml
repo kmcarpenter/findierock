@@ -1,0 +1,11 @@
+<h1>Albums</h1>
+<p>
+Here you will find all the albums we have on file. You can just go <a href='<?= $this->url( array( "action" => "Search" ) ) ?>'>search</a> for an albums of your liking, take a look
+at our <a href='<?= $this->url( array( "action" => "Latest" ) ) ?>'>newest</a> albums, or see what's <a href='<?= $this->url( array( "action" => "Popular" ) ); ?>'>popular</a> right now.
+</p>
+<p>
+In order to get you started, here's our album of the day:
+</p>
+<div id='albumoftheday'>Search
+	<?= $this->render("albums/viewspecific.phtml") ?>
+</div>
